@@ -282,7 +282,7 @@ class _MyCollectionsState extends State<MyCollections> {
     List<TableRow> list = [];
     snapshot.data!.docs.forEach((element) {
       if (widget.userId == element.get("added_by")) {
-        if (_cluster != "o") {
+        if (_cluster != "0") {
           if (_cluster == element.get("cluster")) {
             list.add(tableRow(element));
           }
