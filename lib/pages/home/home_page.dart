@@ -1,16 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:loanprocessingapp/pages/login/login_page.dart';
-import 'package:loanprocessingapp/pages/micro_finance/home/micro_finance_home_page.dart';
-import 'package:loanprocessingapp/pages/profile/change_password.dart';
-import 'package:loanprocessingapp/pages/savings/home/savings_home_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../constance/Constance.dart';
 import '../../main.dart';
+import '../login/login_page.dart';
 import '../login/logout.dart';
 
+import '../micro_finance/home/micro_finance_home_page.dart';
+import '../profile/change_password.dart';
 import '../settings/CheckPrint.dart';
 
 class HomePage extends StatefulWidget {

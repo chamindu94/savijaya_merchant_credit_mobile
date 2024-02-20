@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:loanprocessingapp/models/Cluster.dart';
 
+import '../../../models/Cluster.dart';
 import '../../../services/cluster_service.dart';
 import 'payment_groups.dart';
 

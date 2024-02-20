@@ -3,13 +3,12 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:loanprocessingapp/constance/customSnackbar.dart';
-import 'package:loanprocessingapp/constance/toastMessages.dart';
-import 'package:loanprocessingapp/pages/home/home_page.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 import '../../constance/Constance.dart';
 import '../../constance/loadingIndicator.dart';
+import '../../constance/toastMessages.dart';
+import '../home/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

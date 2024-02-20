@@ -5,12 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:loanprocessingapp/models/Member.dart';
-import 'package:loanprocessingapp/services/members_service.dart';
 import 'package:ntp/ntp.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
-// import 'package:provider/provider.dart';
 
+import '../../../models/Member.dart';
+import '../../../services/members_service.dart';
 import 'print_receipt.dart';
 
 class AddPayment extends StatefulWidget {

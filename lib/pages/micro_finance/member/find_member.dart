@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:loanprocessingapp/pages/micro_finance/member/member_details.dart';
-import 'package:loanprocessingapp/services/members_service.dart';
 
 import '../../../constance/customSnackbar.dart';
 import '../../../constance/loadingIndicator.dart';
 import '../../../main.dart';
+import '../../../services/members_service.dart';
 import '../../login/logout.dart';
+import 'member_details.dart';
 
 class FindMember extends StatefulWidget {
   FindMember({super.key});

@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:loanprocessingapp/models/Branch.dart';
-import 'package:loanprocessingapp/models/Cluster.dart';
-import 'package:loanprocessingapp/models/Member.dart';
-import 'package:loanprocessingapp/services/cluster_service.dart';
 
 import '../../../helpers/helpers.dart';
+import '../../../models/Branch.dart';
+import '../../../models/Cluster.dart';
+import '../../../models/Member.dart';
 import '../../../services/branch_service.dart';
+import '../../../services/cluster_service.dart';
 import '../../../services/income_service.dart';
 import '../../../services/members_service.dart';
 import 'loan_details_sketch.dart';

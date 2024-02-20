@@ -2,11 +2,10 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart' as material;
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:loanprocessingapp/models/SavingMember.dart';
 import '../constance/Constance.dart';
 import '../models/Member.dart';
+import '../models/SavingMember.dart';
 import 'printerenum.dart';
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 
@@ -15,14 +14,14 @@ class TestPrint {
   BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
 
   sample() async {
-    ByteData bytesAsset = await rootBundle.load("assets/print_logo.png");
-    Uint8List imageBytesFromAsset = bytesAsset.buffer
-        .asUint8List(bytesAsset.offsetInBytes, bytesAsset.lengthInBytes);
+    // ByteData bytesAsset = await rootBundle.load("assets/print_logo.png");
+    // Uint8List imageBytesFromAsset = bytesAsset.buffer
+    //     .asUint8List(bytesAsset.offsetInBytes, bytesAsset.lengthInBytes);
 
     bluetooth.isConnected.then((isConnected) {
       if (isConnected == true) {
         bluetooth.printNewLine();
-        bluetooth.printImageBytes(imageBytesFromAsset);
+        // bluetooth.printImageBytes(imageBytesFromAsset);
         bluetooth.printNewLine();
         bluetooth.printCustom(Constance.COMPANY_NAME, Size.boldLarge.val, Align.center.val);
         bluetooth.printCustom(Constance.COMPANY_PHONE, Size.medium.val, Align.center.val);
@@ -43,14 +42,14 @@ class TestPrint {
 
     var total_paid = int.parse(member.loan_amount) + int.parse(member.interest) - int.parse(toBePaid);
 
-    ByteData bytesAsset = await rootBundle.load("assets/print_logo.png");
-    Uint8List imageBytesFromAsset = bytesAsset.buffer
-        .asUint8List(bytesAsset.offsetInBytes, bytesAsset.lengthInBytes);
+    // ByteData bytesAsset = await rootBundle.load("assets/print_logo.png");
+    // Uint8List imageBytesFromAsset = bytesAsset.buffer
+    //     .asUint8List(bytesAsset.offsetInBytes, bytesAsset.lengthInBytes);
 
     bluetooth.isConnected.then((isConnected) {
       if (isConnected == true) {
         bluetooth.printNewLine();
-        bluetooth.printImageBytes(imageBytesFromAsset);
+        // bluetooth.printImageBytes(imageBytesFromAsset);
         bluetooth.printNewLine();
         bluetooth.printCustom(Constance.COMPANY_NAME, Size.boldLarge.val, Align.center.val);
         bluetooth.printCustom(Constance.REG_NO, Size.medium.val, Align.center.val);

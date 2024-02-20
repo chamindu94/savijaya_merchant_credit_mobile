@@ -1,15 +1,12 @@
-import 'dart:developer';
-import 'dart:typed_data';
 
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:loanprocessingapp/models/Member.dart';
 import 'package:ntp/ntp.dart';
 
+import '../../../models/Member.dart';
 import '../../../print_receipts/TestPrint.dart';
 
 class PrintReceipt extends StatefulWidget {

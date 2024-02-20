@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:loanprocessingapp/pages/login/login_page.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
+
+import '../login/login_page.dart';
 
 class ChangePassword extends StatefulWidget {
   @override

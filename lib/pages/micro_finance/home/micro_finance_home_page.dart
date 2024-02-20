@@ -3,13 +3,13 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:loanprocessingapp/helpers/helpers.dart';
-import 'package:loanprocessingapp/main.dart';
-import 'package:loanprocessingapp/pages/micro_finance/collection/my_collections.dart';
-import 'package:loanprocessingapp/services/income_service.dart';
 
+import '../../../helpers/helpers.dart';
+import '../../../main.dart';
+import '../../../services/income_service.dart';
 import '../../home/home_button.dart';
 import '../../login/logout.dart';
+import '../collection/my_collections.dart';
 import '../member/find_member.dart';
 import '../payment/payment_clusters.dart';
 

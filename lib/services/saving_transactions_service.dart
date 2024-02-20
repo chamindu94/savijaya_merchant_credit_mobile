@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:loanprocessingapp/models/SavingTransaction.dart';
 
 import '../models/Response.dart';
+import '../models/SavingTransaction.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _Collection =

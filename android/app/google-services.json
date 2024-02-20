@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "623743315804",
-    "project_id": "royal-star-test",
-    "storage_bucket": "royal-star-test.appspot.com"
+    "project_number": "219828446385",
+    "project_id": "royal-star-investment",
+    "storage_bucket": "royal-star-investment.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:623743315804:android:1bc8e4db5a09a4958fdb99",
+        "mobilesdk_app_id": "1:219828446385:android:b299fe4d3faea51f6fee90",
         "android_client_info": {
           "package_name": "lk.coderoom.royal_star_investments"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDS2cjU5dD_AJHqOBBxY_OeG4ZiDRaYscU"
+          "current_key": "AIzaSyBgQ9DsFGMJuvkVtE1Q3x_zcVxTb4IA71I"
         }
       ],
       "services": {
