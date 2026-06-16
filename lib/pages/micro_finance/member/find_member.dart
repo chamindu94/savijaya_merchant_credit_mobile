@@ -106,7 +106,7 @@ class _FindMemberState extends State<FindMember> {
           decoration: const InputDecoration(
               prefixIcon: Icon(Icons.search),
               contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-              hintText: "Enter DDA Code",
+              hintText: "Enter Member Number",
               border: InputBorder.none),
         ));
 

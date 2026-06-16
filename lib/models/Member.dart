@@ -27,6 +27,7 @@ class Member {
   final String group;
   final String loan_date;
   final String document_charges;
+  final String schedule;
 
   Member(
       {required this.id,
@@ -54,7 +55,9 @@ class Member {
       required this.loanTerm,
       required this.group,
       required this.loan_date,
-      required this.document_charges});
+      required this.document_charges,
+      required this.schedule,
+      });
 
   // Factory method to convert a Firestore document to an object
   factory Member.fromFirestore(DocumentSnapshot doc) {
@@ -85,7 +88,8 @@ class Member {
         loanTerm: data['loanTerm'] ?? "",
         group: data['group'] ?? "",
         loan_date: data['loan_date'] ?? "",
-        document_charges: data['document_charges'] ?? ""
+        document_charges: data['document_charges'] ?? "",
+        schedule: data['schedule'] ?? "",
     );
   }
 
@@ -116,7 +120,9 @@ class Member {
         loanTerm: json['loanTerm'] ?? "",
         group: json['group'] ?? "",
         loan_date: json['loan_date'] ?? "",
-        document_charges: json['document_charges'] ?? "");
+        document_charges: json['document_charges'] ?? "",
+        schedule: json['schedule'] ?? "",
+    );
   }
 
   toJson() {
@@ -146,7 +152,8 @@ class Member {
       'loanTerm': loanTerm,
       'group': group,
       'loan_date': loan_date,
-      'document_charges': document_charges
+      'document_charges': document_charges,
+      'schedule': schedule,
     };
   }
 }

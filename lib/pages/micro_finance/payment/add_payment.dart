@@ -8,7 +8,12 @@ import 'package:intl/intl.dart';
 import 'package:ntp/ntp.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
+import '../../../constance/useful_methods.dart';
+import '../../../helpers/helpers.dart';
+import '../../../models/Income.dart';
 import '../../../models/Member.dart';
+import '../../../models/PaymentStatus.dart';
+import '../../../services/income_service.dart';
 import '../../../services/members_service.dart';
 import 'print_receipt.dart';
 
@@ -149,11 +154,14 @@ class _MemberRowState extends State<MemberRow> {
   TextEditingController amountController = new TextEditingController();
 
   double installment = 0;
+  double arrearsAmount = 0;
   int loanAmount = 0;
   int amountToPay = 0;
   String payment = "";
+  String statusText = "";
+  Color statusColor = Colors.grey;
 
-  List<String> logs = [];
+  List<Income>? incomeList;
 
   late BuildContext dContext;
 
@@ -167,6 +175,7 @@ class _MemberRowState extends State<MemberRow> {
   void initState() {
     super.initState();
     setDateAndTime();
+    arrearsAmount = calculateArrears(member: widget.member);
   }
 
   setDateAndTime() async {
@@ -222,90 +231,60 @@ class _MemberRowState extends State<MemberRow> {
                     SizedBox(height: 5),
                     Text(widget.member.dd_code),
                     SizedBox(height: 5),
-                    (today == null)
-                        ? CircularProgressIndicator()
-                        : StreamBuilder<QuerySnapshot>(
-                            stream: databaseReference
-                                .collection("income")
-                                .where("loan_member",
-                                    isEqualTo: widget.member.id)
-                                .where("loan_no",
-                                    isEqualTo: widget.member.loan_no)
-                                .snapshots(),
-                            builder: (context, snapshot) {
-                              switch (snapshot.connectionState) {
-                                case ConnectionState.waiting:
-                                  return const Center(
-                                      child: CircularProgressIndicator());
+                    StreamBuilder<List<Income>>(
+                      stream: IncomeService.readMemberPaymentAsList(
+                          memberId: widget.member.id,
+                          loanNo: widget.member.loan_no),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else if (snapshot.hasData &&
+                            snapshot.data!.isNotEmpty) {
+                          List<Income> value = snapshot.data!;
 
-                                default:
-                                  if (snapshot.hasData &&
-                                      snapshot.data!.docs.length > 0) {
-                                    var formatter =
-                                        new DateFormat('yyyy-MM-dd');
-                                    var _firstDayOfTheweek = today!.subtract(
-                                        new Duration(days: today!.weekday - 1));
-                                    var _lastDayOfTheweek = today!.add(
-                                        new Duration(
-                                            days: DateTime.daysPerWeek -
-                                                today!.weekday));
+                          return FutureBuilder<PaymentStatus>(
+                              future: calculatePaymentStatus(
+                                  member: widget.member, installments: value),
+                              builder: (context, paymentSnapshot) {
+                                if (!paymentSnapshot.hasData) {
+                                  return Text("Calculating...",
+                                      style: TextStyle(color: Colors.grey));
+                                }
 
-                                    var _firstDayOfTheWeekTimestamp =
-                                        DateTime.parse(formatter
-                                                .format(_firstDayOfTheweek))
-                                            .millisecondsSinceEpoch;
-                                    var _lastDayOfTheWeekTimestamp =
-                                        DateTime.parse(formatter
-                                                .format(_lastDayOfTheweek))
-                                            .millisecondsSinceEpoch;
-                                    var _dateToCheckTimestamp = snapshot.data!
-                                        .docs[snapshot.data!.docs.length - 1]
-                                        .get("date")
-                                        .toDate()
-                                        .millisecondsSinceEpoch;
+                                final status = paymentSnapshot.data!;
 
-                                    String statusText = "";
-                                    Color color = Colors.green;
-
-                                    if (_firstDayOfTheWeekTimestamp <=
-                                            _dateToCheckTimestamp &&
-                                        _lastDayOfTheWeekTimestamp >=
-                                            _dateToCheckTimestamp) {
-                                      statusText = "Done";
-                                      color = Colors.green;
-                                    } else {
-                                      statusText = "Pending";
-                                      color = Colors.red;
-                                    }
-
-                                    return Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          statusText +
-                                              " - " +
-                                              DateFormat('yyyy-MM-dd kk:mm')
-                                                  .format(snapshot
-                                                      .data!
-                                                      .docs[snapshot.data!.docs
-                                                              .length -
-                                                          1]
-                                                      .get("date")
-                                                      .toDate()),
-                                          style: TextStyle(
-                                              color: color,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    );
-                                  } else {
-                                    return Text("No Payment Yet");
-                                  }
-                              }
-                            }),
+                                return Text(
+                                  "${status.statusText} - ${DateFormat('yyyy-MM-dd kk:mm').format(value.last.date.toDate())}",
+                                  style: TextStyle(
+                                    color: status.color,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              });
+                        } else {
+                          return Text("No Payments Yet",
+                              style: TextStyle(color: Colors.grey));
+                        }
+                      },
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      "Arrears: " + MyHelpers.formatNumber(arrearsAmount),
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      "Balance: " +
+                          MyHelpers.formatNumber(
+                              double.parse(widget.member.toPaid)),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.blue),
+                    ),
                   ],
                 ),
               ),

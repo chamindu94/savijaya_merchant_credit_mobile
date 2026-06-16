@@ -1,5 +1,5 @@
-name: royal_star_investments_mobile
-description: Royal Star Investments
+name: savijaya_merchant_credit_mobile
+description: Savijaya Merchant Credit
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -46,6 +46,7 @@ dependencies:
   form_builder_validators: ^9.0.0
   url_launcher: ^6.1.12
   ntp: ^2.0.0
+  location: ^4.4.0
 
 dev_dependencies:
   flutter_test:

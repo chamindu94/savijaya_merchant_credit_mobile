@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../constance/Constance.dart';
+import '../../constance/send_location.dart';
 import '../../main.dart';
 import '../login/login_page.dart';
 import '../login/logout.dart';
@@ -29,6 +30,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
 
     getUserLoginStatus();
+    trackUserLocation();
   }
 
   @override
@@ -40,6 +42,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       getUserLoginStatus();
+      trackUserLocation();
     }
   }
 
@@ -60,6 +63,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
         checkVersion();
       });
+    });
+  }
+
+  trackUserLocation() {
+    storage.read(key: "userId").then((userId) {
+      startTrackingLocation(userId!);
     });
   }
 

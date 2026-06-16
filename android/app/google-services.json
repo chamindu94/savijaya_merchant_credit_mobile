@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "219828446385",
-    "project_id": "royal-star-investment",
-    "storage_bucket": "royal-star-investment.appspot.com"
+    "project_number": "237777455853",
+    "project_id": "savijaya-merchant-credit",
+    "storage_bucket": "savijaya-merchant-credit.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:219828446385:android:b299fe4d3faea51f6fee90",
+        "mobilesdk_app_id": "1:237777455853:android:0d0f28f565e4f4a6bd1ae4",
         "android_client_info": {
-          "package_name": "lk.coderoom.royal_star_investments"
+          "package_name": "lk.coderoom.savijaya_merchant_credit"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBgQ9DsFGMJuvkVtE1Q3x_zcVxTb4IA71I"
+          "current_key": "AIzaSyD2YO7c7MdpE0iH7bfgCQkEIGeB9RIGf88"
         }
       ],
       "services": {

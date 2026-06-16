@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:royal_star_investments_mobile/main.dart';
+import 'package:savijaya_merchant_credit_mobile/main.dart';
 
 
 void main() {
