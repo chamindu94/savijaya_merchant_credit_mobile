@@ -14,12 +14,14 @@ class PrintReceipt extends StatefulWidget {
   final String payment, toBePaid;
   final Member member;
   final String clusterName;
+  final String username;
 
   PrintReceipt(
       this.payment,
       this.toBePaid,
       this.member,
-      this.clusterName
+      this.clusterName,
+      this.username
       );
 
   @override
@@ -167,7 +169,7 @@ class _PrintReceiptState extends State<PrintReceipt> {
                     final formatter = DateFormat('MM/dd/yyyy H:m');
                     final String timestamp = formatter.format(now);
 
-                    testPrint.receipt(branch, timestamp, widget.payment, widget.toBePaid, widget.member, widget.clusterName);
+                    testPrint.receipt(branch, timestamp, widget.payment, widget.toBePaid, widget.member, widget.clusterName, widget.username);
                   },
                   child: Column(
                     children: [

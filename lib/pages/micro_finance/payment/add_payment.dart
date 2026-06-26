@@ -400,83 +400,90 @@ class _MemberRowState extends State<MemberRow> {
 
     var batch = databaseReference.batch();
 
-    await storage.read(key: "userId").then((userId) {
-      storage.read(key: "branch").then((branch) {
-        //set today income
-        var todIncRef = databaseReference
-            .collection("income")
-            .doc(now.millisecondsSinceEpoch.toString());
-        batch.set(todIncRef, {
-          'amount': payment,
-          'added_by': userId,
-          'loan_member': widget.member.id,
-          'cluster': widget.member.cluster,
-          'date': now,
-          'branch': branch,
-          'loan_no': widget.member.loan_no,
-          'toPaid': amountToPay,
-          'installment': installment
-        });
+    final userId = await storage.read(key: "userId");
+    final username = await storage.read(key: "username");
 
-        //update to paid amount
-        var toPaidRef =
-            databaseReference.collection("members").doc(widget.member.id);
-        batch.update(toPaidRef, {'toPaid': amountToPay.toString()});
+    if (userId == null || username == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Unable to set data. Please try again")));
+      return;
+    }
 
-        //set log
-        var logRef = databaseReference
-            .collection("logs")
-            .doc(now.millisecondsSinceEpoch.toString());
-        batch.set(logRef, {
-          'log': _selectedMember.name +
-              " 's installment of Rs." +
-              payment +
-              "/= added successfully. Balance - " +
-              amountToPay.toString(),
-          'date': now,
-          'operator': userId,
-          'type': "payment_log",
-          'branch': branch
-        });
+    //set today income
+    var todIncRef = databaseReference
+        .collection("income")
+        .doc(now.millisecondsSinceEpoch.toString());
+    batch.set(todIncRef, {
+      'amount': payment,
+      'added_by': userId,
+      'loan_member': widget.member.id,
+      'cluster': widget.member.cluster,
+      'date': now,
+      'branch': widget.member.branch,
+      'loan_no': widget.member.loan_no,
+      'toPaid': amountToPay,
+      'installment': installment
+    });
 
-        //commit batch
-        batch.commit().then((value) {
-          pr.hide();
+    //update to paid amount
+    var toPaidRef =
+    databaseReference.collection("members").doc(widget.member.id);
+    batch.update(toPaidRef, {'toPaid': amountToPay.toString()});
 
-          Navigator.of(dContext).pop();
+    //set log
+    var logRef = databaseReference
+        .collection("logs")
+        .doc(now.millisecondsSinceEpoch.toString());
+    batch.set(logRef, {
+      'log': _selectedMember.name +
+          " 's installment of Rs." +
+          payment +
+          "/= added successfully. Balance - " +
+          amountToPay.toString(),
+      'date': now,
+      'operator': userId,
+      'type': "payment_log",
+      'branch': widget.member.branch
+    });
 
-          Navigator.push(
-              dContext,
-              MaterialPageRoute(
-                  builder: (context) => PrintReceipt(
-                      payment.toString(),
-                      amountToPay.toString(),
-                      _selectedMember,
-                      widget.clusterName)));
-        }).catchError((onError) {
-          pr.hide();
+    //commit batch
+    batch.commit().then((value) {
+      pr.hide();
 
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              // return object of type Dialog
-              return AlertDialog(
-                title: new Text("Error"),
-                content: new Text("Network error occurred. Please try again."),
-                actions: <Widget>[
-                  // usually buttons at the bottom of the dialog
-                  new TextButton(
-                    child: new Text("Try Again"),
-                    onPressed: () {
-                      createRecord();
-                    },
-                  ),
-                ],
-              );
-            },
+      Navigator.of(dContext).pop();
+
+      Navigator.push(
+          dContext,
+          MaterialPageRoute(
+              builder: (context) => PrintReceipt(
+                  payment.toString(),
+                  amountToPay.toString(),
+                  _selectedMember,
+                  widget.clusterName,
+                  username
+              )));
+    }).catchError((onError) {
+      pr.hide();
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Error"),
+            content: new Text("Network error occurred. Please try again."),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              new TextButton(
+                child: new Text("Try Again"),
+                onPressed: () {
+                  createRecord();
+                },
+              ),
+            ],
           );
-        });
-      });
+        },
+      );
     });
   }
 }

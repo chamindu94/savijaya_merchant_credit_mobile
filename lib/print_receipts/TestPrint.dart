@@ -25,11 +25,11 @@ class TestPrint {
         bluetooth.printImageBytes(imageBytesFromAsset);
         bluetooth.printNewLine();
         bluetooth.printCustom(Constance.COMPANY_NAME, Size.boldLarge.val, Align.center.val);
-        bluetooth.printCustom(Constance.COMPANY_PHONE, Size.medium.val, Align.center.val);
+        bluetooth.printCustom(Constance.COMPANY_PHONE, Size.bold.val, Align.center.val);
         bluetooth.printNewLine();
-        bluetooth.printCustom("Printer Connected Successfully", Size.medium.val, Align.center.val);
+        bluetooth.printCustom("Printer Connected Successfully", Size.bold.val, Align.center.val);
         bluetooth.printNewLine();
-        bluetooth.printCustom("___________________", Size.medium.val, Align.center.val);
+        bluetooth.printCustom("___________________", Size.bold.val, Align.center.val);
         bluetooth.printNewLine();
         bluetooth.printNewLine();
         bluetooth
@@ -39,7 +39,7 @@ class TestPrint {
     });
   }
 
-  receipt(String branch, String date_time, String payment, String toBePaid, Member member, String clusterName) async {
+  receipt(String branch, String date_time, String payment, String toBePaid, Member member, String clusterName, String username) async {
 
     var total_paid = int.parse(member.loan_amount) + int.parse(member.interest) - int.parse(toBePaid);
 
@@ -47,30 +47,32 @@ class TestPrint {
     Uint8List imageBytesFromAsset = bytesAsset.buffer
         .asUint8List(bytesAsset.offsetInBytes, bytesAsset.lengthInBytes);
 
-    bluetooth.isConnected.then((isConnected) {
+    bluetooth.isConnected.then((isConnected) async {
       if (isConnected == true) {
         bluetooth.printNewLine();
         bluetooth.printImageBytes(imageBytesFromAsset);
+        await Future.delayed(const Duration(milliseconds: 400));
         bluetooth.printNewLine();
         bluetooth.printCustom(Constance.COMPANY_NAME, Size.boldLarge.val, Align.center.val);
-        bluetooth.printCustom(Constance.REG_NO, Size.medium.val, Align.center.val);
-        bluetooth.printCustom(Constance.COMPANY_PHONE, Size.medium.val, Align.center.val);
-        bluetooth.printCustom("----------------------------", Size.medium.val, Align.center.val);
-        bluetooth.printLeftRight("Date Time", date_time, Size.medium.val);
-        bluetooth.printLeftRight("Member #", member.dd_code, Size.medium.val);
-        bluetooth.printLeftRight("Center", clusterName, Size.medium.val);
-        bluetooth.printLeftRight("Name", generateNameWithIni(member.name), Size.medium.val);
-        bluetooth.printCustom("----------------------------", Size.medium.val, Align.center.val);
+        bluetooth.printCustom(Constance.REG_NO, Size.bold.val, Align.center.val);
+        bluetooth.printCustom(Constance.COMPANY_PHONE, Size.bold.val, Align.center.val);
+        bluetooth.printCustom("----------------------------", Size.bold.val, Align.center.val);
+        bluetooth.printLeftRight("Date Time", date_time, Size.bold.val);
+        bluetooth.printLeftRight("Member #", member.dd_code, Size.bold.val);
+        bluetooth.printLeftRight("Center", clusterName, Size.bold.val);
+        bluetooth.printLeftRight("Name", generateNameWithIni(member.name), Size.bold.val);
+        bluetooth.printCustom("----------------------------", Size.bold.val, Align.center.val);
         bluetooth.printCustom("PAYMENT SUMMERY", Size.boldMedium.val, Align.center.val);
-        bluetooth.printCustom("----------------------------", Size.medium.val, Align.center.val);
-        bluetooth.printLeftRight("Loan Amount", member.loan_amount+"/=", Size.medium.val);
-        bluetooth.printLeftRight("Loan Balance", toBePaid+"/=", Size.medium.val);
-        bluetooth.printCustom("----------------------------", Size.medium.val, Align.center.val);
+        bluetooth.printCustom("----------------------------", Size.bold.val, Align.center.val);
+        bluetooth.printLeftRight("Loan Amount", member.loan_amount+"/=", Size.bold.val);
+        bluetooth.printLeftRight("Loan Balance", toBePaid+"/=", Size.bold.val);
+        bluetooth.printLeftRight("F/O", username, Size.bold.val);
+        bluetooth.printCustom("----------------------------", Size.bold.val, Align.center.val);
         bluetooth.printLeftRight("Payment", payment+"/=", Size.boldLarge   .val);
-        bluetooth.printCustom("----------------------------", Size.medium.val, Align.center.val);
-        bluetooth.printCustom("Thank you!", Size.medium.val, Align.center.val);
+        bluetooth.printCustom("----------------------------", Size.bold.val, Align.center.val);
+        bluetooth.printCustom("Thank you!", Size.bold.val, Align.center.val);
         bluetooth.printNewLine();
-        bluetooth.printCustom("___________________", Size.medium.val, Align.center.val);
+        bluetooth.printCustom("___________________", Size.bold.val, Align.center.val);
         bluetooth.printNewLine();
         bluetooth.printNewLine();
         bluetooth
@@ -92,28 +94,28 @@ class TestPrint {
         // bluetooth.printImageBytes(imageBytesFromAsset); //image from Asset
         bluetooth.printNewLine();
         bluetooth.printCustom(Constance.COMPANY_NAME, Size.boldLarge.val, Align.center.val);
-        bluetooth.printCustom(Constance.REG_NO, Size.medium.val, Align.center.val);
-        bluetooth.printCustom(Constance.COMPANY_PHONE, Size.medium.val, Align.center.val);
-        bluetooth.printCustom("----------------------------", Size.medium.val, Align.center.val);
+        bluetooth.printCustom(Constance.REG_NO, Size.bold.val, Align.center.val);
+        bluetooth.printCustom(Constance.COMPANY_PHONE, Size.bold.val, Align.center.val);
+        bluetooth.printCustom("----------------------------", Size.bold.val, Align.center.val);
         bluetooth.print3Column("Ins#", "Amount", "Date", Size.bold.val, format:
         "%-10s %5s %10s %n");
 
         if (snapshot.hasData) {
           snapshot.data!.docs.asMap().forEach((index, value) {
             bluetooth.print3Column((index+1).toString(), value.get("amount") + "/=", DateFormat('yyyy-MM-dd kk:mm')
-                .format(value.get("date").toDate()), Size.medium.val, format:
+                .format(value.get("date").toDate()), Size.bold.val, format:
             "%-5s %10s %17s %n");
           });
         }
 
         bluetooth.printNewLine();
-        bluetooth.printCustom("----------------------------", Size.medium.val, Align.center.val);
+        bluetooth.printCustom("----------------------------", Size.bold.val, Align.center.val);
         bluetooth.printNewLine();
 
-        bluetooth.printCustom(timestamp, Size.medium.val, Align.center.val);
+        bluetooth.printCustom(timestamp, Size.bold.val, Align.center.val);
         bluetooth.printNewLine();
         bluetooth.printNewLine();
-        bluetooth.printCustom("___________________", Size.medium.val, Align.center.val);
+        bluetooth.printCustom("___________________", Size.bold.val, Align.center.val);
         bluetooth.printNewLine();
         bluetooth.printNewLine();
         bluetooth
@@ -128,21 +130,21 @@ class TestPrint {
   //     if (isConnected == true) {
   //       bluetooth.printNewLine();
   //       bluetooth.printCustom(Constance.COMPANY_NAME, Size.boldLarge.val, Align.center.val);
-  //       bluetooth.printCustom("$branch Branch", Size.medium.val, Align.center.val);
-  //       bluetooth.printCustom(Constance.COMPANY_PHONE, Size.medium.val, Align.center.val);
-  //       bluetooth.printCustom(Constance.COMPANY_MOBILE, Size.medium.val, Align.center.val);
-  //       bluetooth.printCustom("----------------------------", Size.medium.val, Align.center.val);
-  //       bluetooth.printLeftRight("Date Time", date_time, Size.medium.val);
-  //       bluetooth.printLeftRight("DDA Code", dd_code, Size.medium.val);
-  //       bluetooth.printLeftRight("Center", cluster, Size.medium.val);
-  //       bluetooth.printLeftRight("Name", generateNameWithIni(name), Size.medium.val);
-  //       bluetooth.printCustom("----------------------------", Size.medium.val, Align.center.val);
+  //       bluetooth.printCustom("$branch Branch", Size.bold.val, Align.center.val);
+  //       bluetooth.printCustom(Constance.COMPANY_PHONE, Size.bold.val, Align.center.val);
+  //       bluetooth.printCustom(Constance.COMPANY_MOBILE, Size.bold.val, Align.center.val);
+  //       bluetooth.printCustom("----------------------------", Size.bold.val, Align.center.val);
+  //       bluetooth.printLeftRight("Date Time", date_time, Size.bold.val);
+  //       bluetooth.printLeftRight("DDA Code", dd_code, Size.bold.val);
+  //       bluetooth.printLeftRight("Center", cluster, Size.bold.val);
+  //       bluetooth.printLeftRight("Name", generateNameWithIni(name), Size.bold.val);
+  //       bluetooth.printCustom("----------------------------", Size.bold.val, Align.center.val);
   //       bluetooth.printLeftRight("Doc. Charge", document_charge+"/=", Size.boldLarge   .val);
-  //       bluetooth.printCustom("----------------------------", Size.medium.val, Align.center.val);
-  //       bluetooth.printCustom("Thank you!", Size.medium.val, Align.center.val);
+  //       bluetooth.printCustom("----------------------------", Size.bold.val, Align.center.val);
+  //       bluetooth.printCustom("Thank you!", Size.bold.val, Align.center.val);
   //       bluetooth.printNewLine();
   //       bluetooth.printNewLine();
-  //       bluetooth.printCustom("___________________", Size.medium.val, Align.center.val);
+  //       bluetooth.printCustom("___________________", Size.bold.val, Align.center.val);
   //       bluetooth.printNewLine();
   //       bluetooth.printNewLine();
   //       bluetooth
@@ -174,21 +176,21 @@ class TestPrint {
         // bluetooth.printImageBytes(imageBytesFromAsset);
         // bluetooth.printNewLine();
         bluetooth.printCustom(Constance.COMPANY_NAME, Size.boldLarge.val, Align.center.val);
-        // bluetooth.printCustom("$branch Branch", Size.medium.val, Align.center.val);
-        bluetooth.printCustom(Constance.COMPANY_PHONE, Size.medium.val, Align.center.val);
-        bluetooth.printCustom("----------------------------", Size.medium.val, Align.center.val);
-        bluetooth.printLeftRight("Date Time", date_time, Size.medium.val);
-        bluetooth.printLeftRight("Member No.", member.memberNumber, Size.medium.val);
-        bluetooth.printLeftRight("Name", generateNameWithIni(member.memberName), Size.medium.val);
-        bluetooth.printCustom("----------------------------", Size.medium.val, Align.center.val);
+        // bluetooth.printCustom("$branch Branch", Size.bold.val, Align.center.val);
+        bluetooth.printCustom(Constance.COMPANY_PHONE, Size.bold.val, Align.center.val);
+        bluetooth.printCustom("----------------------------", Size.bold.val, Align.center.val);
+        bluetooth.printLeftRight("Date Time", date_time, Size.bold.val);
+        bluetooth.printLeftRight("Member No.", member.memberNumber, Size.bold.val);
+        bluetooth.printLeftRight("Name", generateNameWithIni(member.memberName), Size.bold.val);
+        bluetooth.printCustom("----------------------------", Size.bold.val, Align.center.val);
         bluetooth.printCustom(status.toUpperCase(), Size.boldMedium.val, Align.center.val);
-        bluetooth.printCustom("----------------------------", Size.medium.val, Align.center.val);
+        bluetooth.printCustom("----------------------------", Size.bold.val, Align.center.val);
         bluetooth.printLeftRight("Amount", amount+"/=", Size.boldLarge   .val);
         bluetooth.printLeftRight("Balance", balance+"/=", Size.boldLarge   .val);
-        bluetooth.printCustom("----------------------------", Size.medium.val, Align.center.val);
-        bluetooth.printCustom("Thank you!", Size.medium.val, Align.center.val);
+        bluetooth.printCustom("----------------------------", Size.bold.val, Align.center.val);
+        bluetooth.printCustom("Thank you!", Size.bold.val, Align.center.val);
         bluetooth.printNewLine();
-        bluetooth.printCustom("___________________", Size.medium.val, Align.center.val);
+        bluetooth.printCustom("___________________", Size.bold.val, Align.center.val);
         bluetooth.printNewLine();
         bluetooth.printNewLine();
         bluetooth
