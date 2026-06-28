@@ -1,5 +1,5 @@
 class Constance {
-  static const String version_code = "1.0.0";
+  static const String version_code = "1.0.2";
   static const String drive_url = "https://drive.google.com/drive/folders/1fHaIgFVzotE3F6H6IMozGO9TdHlBgiMt?usp=sharing";
 
   static const String COMPANY_NAME = "Savijaya Merchant Credit";

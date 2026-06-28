@@ -33,6 +33,7 @@ class AddPayment extends StatefulWidget {
 
 class _AddPaymentState extends State<AddPayment> {
   List<Member>? groupMembers;
+  List<Member>? filteredGroupMembers;
 
   String _searchKeyword = "";
   String _searchBy = 'name';
@@ -57,6 +58,7 @@ class _AddPaymentState extends State<AddPayment> {
 
       setState(() {
         groupMembers = tmp;
+        filteredGroupMembers = tmp;
       });
     });
   }
@@ -90,7 +92,7 @@ class _AddPaymentState extends State<AddPayment> {
                         value: "nic",
                       ),
                       DropdownMenuItem(
-                        child: Text("DDA"),
+                        child: Text("Member Number"),
                         value: "dd_code",
                       )
                     ],
@@ -115,6 +117,7 @@ class _AddPaymentState extends State<AddPayment> {
                     onChanged: (value) {
                       setState(() {
                         _searchKeyword = value;
+                        filterMembers();
                       });
                     },
                     textCapitalization: TextCapitalization.words,
@@ -128,13 +131,43 @@ class _AddPaymentState extends State<AddPayment> {
               : Expanded(
                   child: ListView.builder(
                   padding: EdgeInsets.all(8.0),
-                  itemCount: groupMembers!.length,
+                  itemCount: filteredGroupMembers!.length,
                   itemBuilder: (buildContext, index) =>
-                      MemberRow(groupMembers![index], widget.clusterName),
+                      MemberRow(filteredGroupMembers![index], widget.clusterName),
                 )),
         ],
       ),
     );
+  }
+
+  filterMembers() {
+    filteredGroupMembers = [];
+
+    groupMembers?.forEach((element) {
+      if (_searchKeyword == "") {
+        filteredGroupMembers = groupMembers;
+      } else {
+        if (_searchBy == "name") {
+          if (element.name
+              .toLowerCase()
+              .contains(_searchKeyword.toString().toLowerCase())) {
+            filteredGroupMembers?.add(element);
+          }
+        } else if (_searchBy == "nic") {
+          if (element.nic
+              .toLowerCase()
+              .contains(_searchKeyword.toString().toLowerCase())) {
+            filteredGroupMembers?.add(element);
+          }
+        } else if (_searchBy == "dd_code") {
+          if (element.dd_code
+              .toLowerCase()
+              .contains(_searchKeyword.toString().toLowerCase())) {
+            filteredGroupMembers?.add(element);
+          }
+        }
+      }
+    });
   }
 }
 
@@ -427,7 +460,7 @@ class _MemberRowState extends State<MemberRow> {
 
     //update to paid amount
     var toPaidRef =
-    databaseReference.collection("members").doc(widget.member.id);
+        databaseReference.collection("members").doc(widget.member.id);
     batch.update(toPaidRef, {'toPaid': amountToPay.toString()});
 
     //set log
@@ -460,8 +493,7 @@ class _MemberRowState extends State<MemberRow> {
                   amountToPay.toString(),
                   _selectedMember,
                   widget.clusterName,
-                  username
-              )));
+                  username)));
     }).catchError((onError) {
       pr.hide();
 
