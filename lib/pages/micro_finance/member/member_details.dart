@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 
 import '../../../helpers/helpers.dart';
@@ -10,6 +11,7 @@ import '../../../services/branch_service.dart';
 import '../../../services/cluster_service.dart';
 import '../../../services/income_service.dart';
 import '../../../services/members_service.dart';
+import '../payment/print_receipt.dart';
 import 'loan_details_sketch.dart';
 import 'previous_loans.dart';
 import 'print_details.dart';
@@ -27,6 +29,9 @@ class MemberDetails extends StatefulWidget {
 class _MemberDetailsState extends State<MemberDetails> {
   final databaseReference = FirebaseFirestore.instance;
   late AsyncSnapshot<QuerySnapshot> loanDetailsSnapshot;
+  Member? member;
+  String? centerName;
+  final storage = new FlutterSecureStorage();
 
   @override
   void initState() {
@@ -62,19 +67,19 @@ class _MemberDetailsState extends State<MemberDetails> {
             if (!snapshot.hasData) {
               return new Text("No Data");
             } else {
-              Member member = Member.fromJson(
+              member = Member.fromJson(
                   snapshot.data!.data() as Map<String, dynamic>);
 
-              int amount = int.parse(member.loan_amount);
-              int interest = int.parse(member.interest);
-              int terms = int.parse(member.loanTerm);
+              int amount = int.parse(member!.loan_amount);
+              int interest = int.parse(member!.interest);
+              int terms = int.parse(member!.loanTerm);
 
               String installment =
                   ((amount + interest) / terms).toStringAsFixed(0);
 
-              String loan_no = member.loan_no;
+              String loan_no = member!.loan_no;
 
-              String doc_charges = member.document_charges;
+              String doc_charges = member!.document_charges;
 
               return Column(
                 children: [
@@ -93,21 +98,21 @@ class _MemberDetailsState extends State<MemberDetails> {
                           SizedBox(
                             height: 40,
                           ),
-                          PersonalDetailsSketch("Name", member.name),
+                          PersonalDetailsSketch("Name", member!.name),
                           SizedBox(
                             height: 30,
                           ),
-                          PersonalDetailsSketch("Mobile Number", member.mobile),
+                          PersonalDetailsSketch("Mobile Number", member!.mobile),
                           SizedBox(
                             height: 30,
                           ),
-                          PersonalDetailsSketch("Address", member.address),
+                          PersonalDetailsSketch("Address", member!.address),
                           SizedBox(
                             height: 30,
                           ),
                           FutureBuilder<Cluster>(
                               future: ClusterService.readCluster(
-                                  id: member.cluster),
+                                  id: member!.cluster),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -116,6 +121,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                                 if (!snapshot.hasData) {
                                   return new Container();
                                 } else {
+                                  centerName = snapshot.data!.name;
                                   return PersonalDetailsSketch(
                                       "Center", snapshot.data!.name);
                                 }
@@ -125,8 +131,8 @@ class _MemberDetailsState extends State<MemberDetails> {
                           ),
                           FutureBuilder<String>(
                               future: ClusterService.readGroupName(
-                                  clusterId: member.cluster,
-                                  groupId: member.group),
+                                  clusterId: member!.cluster,
+                                  groupId: member!.group),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -142,16 +148,16 @@ class _MemberDetailsState extends State<MemberDetails> {
                           SizedBox(
                             height: 30,
                           ),
-                          PersonalDetailsSketch("NIC Number", member.nic),
+                          PersonalDetailsSketch("NIC Number", member!.nic),
                           SizedBox(
                             height: 30,
                           ),
-                          PersonalDetailsSketch("DDA Code", member.dd_code),
+                          PersonalDetailsSketch("DDA Code", member!.dd_code),
                           SizedBox(
                             height: 30,
                           ),
                           FutureBuilder<Branch>(
-                            future: BranchServices.readBranch(id: member.branch),
+                            future: BranchServices.readBranch(id: member!.branch),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -191,11 +197,11 @@ class _MemberDetailsState extends State<MemberDetails> {
                           Row(
                             children: <Widget>[
                               LoanDetailsSketch(
-                                  "Amount", member.loan_amount + "/="),
+                                  "Amount", member!.loan_amount + "/="),
                               LoanDetailsSketch(
-                                  "Interest", member.interest + "/="),
-                              LoanDetailsSketch("Terms", member.loanTerm),
-                              LoanDetailsSketch("Issue Date", member.loan_date),
+                                  "Interest", member!.interest + "/="),
+                              LoanDetailsSketch("Terms", member!.loanTerm),
+                              LoanDetailsSketch("Issue Date", member!.loan_date),
                             ],
                           ),
                           Padding(
@@ -359,6 +365,19 @@ class _MemberDetailsState extends State<MemberDetails> {
             ),
           ),
         )),
+        TableCell(
+            child: Container(
+              padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+              child: Center(
+                child: IconButton(
+                  icon: Icon(Icons.print),
+                  onPressed: () {
+                    getReceiptData(element);
+                  },
+                ),
+              ),
+            )
+        )
       ]);
       list.add(tableRow);
     });
@@ -399,9 +418,41 @@ class _MemberDetailsState extends State<MemberDetails> {
             ),
           ),
         ),
+        TableCell(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Center(
+              child: Text(
+                "Print",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ),
       ]),
     );
 
     return list;
+  }
+
+  getReceiptData(element) async {
+
+    final username = await storage.read(key: "username");
+
+    if (username == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Unable to set data. Please try again")));
+      return;
+    }
+
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PrintReceipt(
+                  element.get("amount").toString(),
+                  element.get("toPaid").toString(),
+                  member!,
+                  centerName!,
+                  username)));
   }
 }

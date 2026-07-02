@@ -15,6 +15,7 @@ import '../../../models/Member.dart';
 import '../../../models/PaymentStatus.dart';
 import '../../../services/income_service.dart';
 import '../../../services/members_service.dart';
+import '../member/member_details.dart';
 import 'print_receipt.dart';
 
 class AddPayment extends StatefulWidget {
@@ -319,6 +320,23 @@ class _MemberRowState extends State<MemberRow> {
                           fontWeight: FontWeight.bold, color: Colors.blue),
                     ),
                   ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 10.0),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                MemberDetails(widget.member.id)));
+                  },
+                  child: Icon(
+                    Icons.file_present,
+                    size: 30,
+                    color: Colors.blue,
+                  ),
                 ),
               ),
             ],
